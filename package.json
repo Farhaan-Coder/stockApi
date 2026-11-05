@@ -1,0 +1,11 @@
+{
+  "name": "stock-app",
+  "version": "1.0.0",
+  "description": "Real-time BSE stock tracking application with JSON REST server",
+  "scripts": {
+    "start": "json-server stock.json -p 7600 -s ."
+  },
+  "dependencies": {
+    "json-server": "^1.0.0-beta.15"
+  }
+}
