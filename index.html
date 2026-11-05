@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StockMarket Portal | Real-Time BSE Market Telemetry</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        :root {
+            --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            --hero-bg: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 40%),
+                       radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                       #0b0f19;
+            --card-hover-border: #3b82f6;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* Glassmorphism Navbar */
+        .navbar-custom {
+            background: rgba(11, 15, 25, 0.95) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .pulse-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        /* Compact Hero Section */
+        .hero-section {
+            background: var(--hero-bg);
+            color: #ffffff;
+            position: relative;
+            padding: 1.5rem 0 1.35rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-size: 1.65rem;
+            font-weight: 750;
+            letter-spacing: -0.025em;
+            line-height: 1.25;
+            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-stat-chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 0.45rem 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            transition: all 0.2s ease;
+        }
+
+        .hero-stat-chip:hover {
+            background: rgba(255, 255, 255, 0.09);
+            transform: translateY(-1px);
+        }
+
+        .hero-search-wrapper {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50rem;
+            padding: 0.2rem 0.4rem;
+            backdrop-filter: blur(10px);
+            max-width: 460px;
+        }
+
+        .hero-search-wrapper .form-control {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 0.88rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .hero-search-wrapper .form-control:focus {
+            box-shadow: none;
+            color: #ffffff;
+        }
+
+        .hero-search-wrapper .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Stock Cards */
+        .stock-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            background: #ffffff;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        .stock-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
+            border-color: #cbd5e1;
+        }
+
+        .logo-box {
+            height: 170px;
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .logo-box img {
+            max-height: 110px;
+            max-width: 85%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+            transition: transform 0.25s ease;
+        }
+
+        .stock-card:hover .logo-box img {
+            transform: scale(1.04);
+        }
+
+        .filter-btn.active {
+            background-color: #0b0f19 !important;
+            color: #ffffff !important;
+            border-color: #0b0f19 !important;
+        }
+
+        /* Spin animation for refresh button */
+        .spin {
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Enhanced Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-2">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-5 text-white" href="#">
+                <span class="d-inline-flex align-items-center justify-content-center bg-primary rounded-3 text-white px-2 py-1 shadow-sm">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </span>
+                <span>Stock<span class="text-primary">Pulse</span></span>
+            </a>
+
+            <button class="navbar-toggler border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+                    <li class="nav-item">
+                        <a class="nav-link active fw-medium px-3 py-1" href="#watchlist"><i class="bi bi-grid-fill me-1"></i> Watchlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50 px-3 py-1" href="http://localhost:7600/stocks" target="_blank"><i class="bi bi-code-slash me-1"></i> JSON API</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50 px-3 py-1" href="https://www.moneycontrol.com" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right me-1"></i> MoneyControl</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-2 bg-dark bg-opacity-75 border border-secondary border-opacity-25 px-3 py-1 rounded-pill">
+                        <span class="pulse-indicator"></span>
+                        <span class="small fw-semibold text-light text-uppercase tracking-wider" style="font-size: 0.72rem;">BSE Live Feed</span>
+                    </div>
+
+                    <button class="btn btn-outline-light btn-sm rounded-pill px-3 py-1 d-flex align-items-center gap-2" onclick="manualRefresh()" id="refreshBtn">
+                        <i class="bi bi-arrow-clockwise" id="refreshIcon"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Compact Modern Hero Section -->
+    <header class="hero-section">
+        <div class="container position-relative">
+            <div class="row align-items-center gy-3">
+                <div class="col-lg-7">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="badge bg-primary bg-opacity-25 text-info border border-primary border-opacity-25 rounded-pill px-2 py-0" style="font-size: 0.72rem;">
+                            <i class="bi bi-broadcast me-1"></i> Live Telemetry
+                        </span>
+                        <span class="text-white-50 small" style="font-size: 0.76rem;" id="lastUpdatedText">
+                            Syncing live ticker data...
+                        </span>
+                    </div>
+
+                    <h1 class="hero-title mb-1">
+                        Real-Time Indian Equities &amp; Market Intelligence
+                    </h1>
+
+                    <p class="text-white-50 small mb-3" style="max-width: 540px; font-size: 0.86rem; line-height: 1.45;">
+                        Live cash prices, daily range, and percentage movements from Bombay Stock Exchange (BSE), powered by MoneyControl API.
+                    </p>
+
+                    <!-- Compact Search Bar in Hero -->
+                    <div class="hero-search-wrapper d-flex align-items-center gap-2 shadow-sm">
+                        <i class="bi bi-search text-white-50 ps-2" style="font-size: 0.85rem;"></i>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search stock by company name or symbol (e.g. SBI, TCS)..." oninput="filterStocks()">
+                        <button class="btn btn-primary rounded-pill px-3 py-1 btn-sm" style="font-size: 0.78rem;" onclick="filterStocks()">Filter</button>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="hero-stat-chip">
+                                <span class="text-white-50"><i class="bi bi-layers-fill text-primary me-1"></i>Tracked</span>
+                                <span class="fw-bold text-white" id="statStockCount">12 Stocks</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="hero-stat-chip">
+                                <span class="text-white-50"><i class="bi bi-arrow-repeat text-info me-1"></i>Polling</span>
+                                <span class="fw-bold text-white">30s Auto</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="hero-stat-chip">
+                                <span class="text-white-50"><i class="bi bi-bank2 text-warning me-1"></i>Exchange</span>
+                                <span class="fw-bold text-white">BSE Cash</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="hero-stat-chip">
+                                <span class="text-white-50"><i class="bi bi-cpu-fill text-success me-1"></i>Port</span>
+                                <span class="fw-bold text-white">7600 REST</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="container flex-grow-1 py-4" id="watchlist">
+        <!-- Controls & Filters Bar -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 mb-4 border-bottom gap-3">
+            <div>
+                <h3 class="fw-bold mb-1 d-flex align-items-center gap-2" style="font-size: 1.45rem;">
+                    <span>Market Watchlist</span>
+                    <span class="badge bg-secondary-subtle text-secondary fs-6 rounded-pill" id="resultCountBadge">12 Equities</span>
+                </h3>
+                <p class="text-muted small mb-0">Live equity cash quotes with change indicators</p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="btn-group shadow-sm rounded-pill p-1 bg-white border" role="group">
+                <button type="button" class="btn btn-sm rounded-pill px-3 filter-btn active" id="filter-all" onclick="setFilter('all')">
+                    All Equities
+                </button>
+                <button type="button" class="btn btn-sm rounded-pill px-3 filter-btn text-success" id="filter-gainers" onclick="setFilter('gainers')">
+                    <i class="bi bi-arrow-up-right me-1"></i> Gainers
+                </button>
+                <button type="button" class="btn btn-sm rounded-pill px-3 filter-btn text-danger" id="filter-losers" onclick="setFilter('losers')">
+                    <i class="bi bi-arrow-down-right me-1"></i> Losers
+                </button>
+            </div>
+        </div>
+
+        <!-- Stock Cards Grid -->
+        <div id="display" class="row gx-4 gy-4">
+            <!-- Dynamic cards rendered by stock.js -->
+        </div>
+    </main>
+
+    <!-- Sleek Modern Footer -->
+    <footer class="bg-dark text-light mt-auto py-4 border-top border-secondary border-opacity-25" style="background-color: #0b0f19 !important;">
+        <div class="container">
+            <div class="row gy-3 align-items-center">
+                <div class="col-lg-5 text-center text-lg-start">
+                    <div class="d-flex align-items-center justify-content-center justify-content-lg-start gap-2 mb-1">
+                        <span class="d-inline-flex align-items-center justify-content-center bg-primary rounded text-white p-1">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </span>
+                        <h6 class="mb-0 text-white fw-bold">StockPulse Portal</h6>
+                    </div>
+                    <p class="text-white-50 small mb-0" style="font-size: 0.8rem;">
+                        Real-time stock monitoring application combining JSON REST architecture with MoneyControl live BSE feeds.
+                    </p>
+                </div>
+                <div class="col-lg-7">
+                    <div class="d-flex flex-wrap justify-content-center justify-content-lg-end align-items-center gap-3">
+                        <ul class="list-inline mb-0 text-center text-lg-end">
+                            <li class="list-inline-item me-3"><a href="#watchlist" class="text-white-50 text-decoration-none small">Watchlist</a></li>
+                            <li class="list-inline-item me-3"><a href="http://localhost:7600/stocks" target="_blank" class="text-white-50 text-decoration-none small">REST API</a></li>
+                            <li class="list-inline-item"><a href="https://priceapi.moneycontrol.com" target="_blank" class="text-white-50 text-decoration-none small">Price Feed</a></li>
+                        </ul>
+                        <div class="vr bg-secondary opacity-50 d-none d-md-block" style="height: 20px;"></div>
+                        <div class="text-white-50 small text-center text-lg-end" style="font-size: 0.8rem;">
+                            &copy; 2026 StockPulse. All rights reserved.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="stock.js"></script>
+    <script>
+        window.onload = function () {
+            getStocks();                    
+            setInterval(getStocks, 30000); 
+        };
+    </script>
+</body>
+</html>

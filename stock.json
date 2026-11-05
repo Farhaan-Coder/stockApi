@@ -1,0 +1,76 @@
+{
+  "stocks": [
+    {
+      "id": 1,
+      "name": "SBI",
+      "logo": "sbi.png",
+      "payload": {}
+    },
+    {
+      "id": 2,
+      "name": "ACC",
+      "logo": "ACC.png",
+      "payload": {}
+    },
+    {
+      "id": 3,
+      "name": "ITC",
+      "logo": "ITC.png",
+      "payload": {}
+    },
+    {
+      "id": 4,
+      "name": "MRF",
+      "logo": "MRF.png",
+      "payload": {}
+    },
+    {
+      "id": 5,
+      "name": "TCS",
+      "logo": "TCS.png",
+      "payload": {}
+    },
+    {
+      "id": 6,
+      "name": "HCL",
+      "logo": "hcl.png",
+      "payload": {}
+    },
+    {
+      "id": 7,
+      "name": "PSB",
+      "logo": "PSB.png",
+      "payload": {}
+    },
+    {
+      "id": 8,
+      "name": "BPL",
+      "logo": "BPL.png",
+      "payload": {}
+    },
+    {
+      "id": 9,
+      "name": "DLF",
+      "logo": "DLF.png",
+      "payload": {}
+    },
+    {
+      "id": 10,
+      "name": "NAC",
+      "logo": "nac.png",
+      "payload": {}
+    },
+    {
+      "id": 11,
+      "name": "IC8",
+      "logo": "vodafone.png",
+      "payload": {}
+    },
+    {
+      "id": 12,
+      "name": "BTV",
+      "logo": "airtel.png",
+      "payload": {}
+    }
+  ]
+}

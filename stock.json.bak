@@ -1,0 +1,77 @@
+{
+    "stocks": [
+        {
+            "id":1,
+            "name":"SBI",
+            "logo":"https://i.ibb.co/WNT7DWRV/sbi.png",
+            "payload": {}
+        },
+        {
+            "id":2,
+            "name":"ACC",
+            "logo":"https://i.ibb.co/MyKVPDpV/ACC.png",
+            "payload": {}
+        },
+        {
+            "id":3,
+            "name":"ITC",
+            "logo":"https://i.ibb.co/qMJrTcJG/ITC.png",
+            "payload": {}
+        },
+        {
+            "id":4,
+            "name":"MRF",
+            "logo":"https://i.ibb.co/DPvfjb5Q/MRF.png",
+            "payload": {}
+        },
+        {
+            "id":5,
+            "name":"TCS",
+            "logo":"https://i.ibb.co/v4J2L09W/TCS.jpg",
+            "payload": {}
+        },
+        {
+            "id":6,
+            "name":"HCL",
+            "logo":"https://i.ibb.co/2xx7HKC/hcl.png",
+            "payload": {}
+        },
+        {
+            "id":7,
+            "name":"PSB",
+            "logo":"https://i.ibb.co/SwgBHpBP/PSB.png",
+            "payload": {}
+        },
+        {
+            "id":8,
+            "name":"BPL",
+            "logo":"https://i.ibb.co/GQWgzHt8/BPL.webp",
+            "payload": {}
+        },
+        {
+            "id":9,
+            "name":"DLF",
+            "logo":"https://i.ibb.co/ycCdLgzB/DLF.png",
+            "payload": {}
+        },
+        {
+            "id":10,
+            "name":"NAC",
+            "logo":"https://i.ibb.co/WpBKdSYP/vodafone.jpg",
+            "payload": {}
+        },
+        {
+            "id":11,
+            "name":"IC8",
+            "logo":"https://i.ibb.co/FZ2b9x6/nac.png",
+            "payload": {}
+        },
+        {
+            "id":12,
+            "name":"BTV",
+            "logo":"https://i.ibb.co/TxWfsG42/airtel.png",
+            "payload": {}
+        }
+    
+]
+}
